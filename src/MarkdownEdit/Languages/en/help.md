@@ -11,7 +11,9 @@ Keyboard Shortcuts
     Ctrl+Shift+S   Save file As
     Ctrl+R         Recent files
     Ctrl+E         Export HTML to clipboard
-    Ctrl+Shift+E   Export HTML and template to clipboard
+    Ctrl+Shift+E   Export HTML with template to clipboard
+    Alt+E          Save As HTML
+    F5             Reload file
     Alt+F4         Exit
 
     Ctrl+W         Toggle word wrap
@@ -19,6 +21,7 @@ Keyboard Shortcuts
     F11            Toggle full screen
     F12            Toggle preview/edit/both
     Alt+S          Toggle auto save
+    Ctrl+,         Toggle settings
 
     Tab            Indent current line/selection 2 spaces
     Shift+Tab      Out-dent current line/selection 2 spaces
@@ -54,11 +57,12 @@ Keyboard Shortcuts
     Ctrl+B         Bold selection / no selection insert **
     Ctrl+I         Italic selection / no selection insert *
     Ctrl+K         Code (wrap with back ticks ``) / no selection insert `
-    Ctrl+L         Convert selection to list. Toggle unordered/ordered
+    Alt+L          Convert selection to list. Toggle unordered/ordered
     Ctrl+Q         Convert selection/line to block quote
     Alt+F          Wrap & Format text
     Alt+Ctrl+F     Wrap, Format, Use Reference Links
     Alt+Shift+F    Unwrap & Format text
+    Ctrl+L         Insert Hyperlink
 
     Ctrl+1         Insert # at beginning of line
     Ctrl+2         Insert ## at beginning of line
@@ -166,7 +170,7 @@ Snippets consist of a single line starting with:
 
 Example
 
-    mde  [Markdown Edit](http://mike-ward.net/markdown)
+    mde  [Markdown Edit](http://markdownedit.com)
 
 With this snippet defined, open Markdown Edit and type
 
@@ -176,15 +180,17 @@ Where `[TAB]` is the tab key.
 
 The `mde` text is replaced by
 
-    [Markdown Edit](http://mike-ward.net/markdown)
+    [Markdown Edit](http://markdownedit.com)
 
 ### Snippet Substitution Parameters
 
+-   $CLIPBOARD$ - is replaced with clipboard contents (text only)
+
 -   $END$ - Positions the cursor after insertion. For instance
 
-    mde [Markdown $END$ Edit](http://mike-ward.net/markdown)
+    mde [Markdown $END$ Edit](http://markdownedit.com)
 
-positions the cursor between *Markdown* and *Edit*
+    positions the cursor between *Markdown* and *Edit*
 
 -   $DATE$ - is replaced with the current date and time
 
@@ -273,19 +279,13 @@ Etc.
 Limitations
 -----------
 
--   Only supports CommonMark
 -   Single document Interface
--   <s>Syntax highlighting does not recognize multiple-line constructs. It uses
-    regular expressions which don't understand the underlying Markdown
-    constructs. I'm hoping that as CommonMark matures a syntax parser (like PEG)
-    will emerge.</s>
 -   I wrote it ;)
 
 About
 -----
 
-Version 1.10.0  
-Home Page: <http://mike-ward.net/markdownedit>  
+Home Page: <http://markdownedit.com>  
 Twitter: `@mikeward_aa` 
 Source: <https://github.com/mike-ward/Markdown-Edit>
 

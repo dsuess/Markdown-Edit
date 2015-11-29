@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using System.Windows;
 using MarkdownEdit.Controls;
-using MarkdownEdit.MarkdownConverters;
 using MarkdownEdit.Models;
 using MarkdownEdit.Properties;
 using MarkdownEdit.Snippets;
@@ -21,14 +20,13 @@ namespace MarkdownEdit
         private void OnStartup(object sender, StartupEventArgs ea)
         {
             InitializeSettings();
+            if (UserSettings == null) return;
             Activated += OnActivated;
 
-            var commonmarkConverter = new CommonMarkConverter();
-            var githubMarkdownConverter = new GitHubMarkdownConverter();
             _spellingService = new SpellingService();
             var spellCheckProvider = new SpellCheckProvider(_spellingService);
             var snippetManager = new SnippetManager();
-            var mainWindow = new MainWindow(commonmarkConverter, githubMarkdownConverter, spellCheckProvider, snippetManager);
+            var mainWindow = new MainWindow(spellCheckProvider, snippetManager);
             var windowPlacementSettings = mainWindow.GetWindowPlacementSettings();
 
             if (windowPlacementSettings.UpgradeSettings)

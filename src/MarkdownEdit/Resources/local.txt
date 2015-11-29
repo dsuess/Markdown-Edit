@@ -8,11 +8,12 @@ tooltip-new-command:              New - Ctrl+N
 tooltip-open-command:             Open - Ctrl+O
 tooltip-save-command:             Save - Ctrl+S
 tooltip-save-as-command:          Save as - Ctrl+Shift+S
-tooltip-toggle-settings:          Settings
+tooltip-toggle-settings:          Settings - Ctrl+,
 tooltip-word-count:               Word Count
 tooltip-spell-check:              Spell Check - Ctrl+F7
 tooltip-word-wrap:                Word Wrap - Ctrl+W
 tooltip-auto-save:                Auto Save - Alt+S
+tooltip-new-version:              New version available
 settings-flyout-header:           Settings
 
 === Editor
@@ -47,6 +48,7 @@ settings-show-end-of-line:        Show Line Endings
 settings-sync-scroll-pos:         Synchronize Scroll Positions
 settings-format-on-save:          Format Text on Save
 settings-github-markdown:         GitHub Markdown
+settings-line-endings:            Line Endings
 
 settings-spell-check-section:     Spell Checking
 settings-spell-checking:          Spell Checking
@@ -61,6 +63,11 @@ settings-open-html-template:      HTML Template
 settings-open-dictionary:         User Dictionary
 settings-open-snippets:           Snippets
 settings-open-key-bindings:       Key Bindings
+
+settings-about:                   About
+settings-version:				  Version
+settings-web:					  Web
+settings-source:				  Source
 
 === Find Replace Dialog
 
@@ -105,8 +112,14 @@ tooltip-alt-s:                    Alt+S
 tooltip-ctrl-f7:                  Ctrl+F7
 tooltip-ctrl-w:                   Ctrl+W
 
+=== Insert Hyperlink Dialog
+
+insert-hyperlink-title:           Insert Hyperlink
+insert-hyperlink-optional-title:  optional title
+
 === Generic
 
 open:                             Open
 save:                             Save
 cancel:                           Cancel
+message-html-clipboard:		        HTML copied to clipboard

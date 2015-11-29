@@ -8,11 +8,12 @@ tooltip-new-command:              Nouveau - Ctrl+N
 tooltip-open-command:             Ouvrir - Ctrl+O
 tooltip-save-command:             Enregistrer - Ctrl+S
 tooltip-save-as-command:          Enregistrer sous - Ctrl+Shift+S
-tooltip-toggle-settings:          Réglages
+tooltip-toggle-settings:          Réglages - Ctrl+,
 tooltip-word-count:               Nombre de mots
 tooltip-spell-check:              Correction orthographique - Ctrl+F7
 tooltip-word-wrap:                Retour à la ligne - Ctrl+W
 tooltip-auto-save:                Sauvegarde automatique - Alt+S
+tooltip-new-version:              Nouvelle version disponible
 settings-flyout-header:           Réglages
 
 === Editor
@@ -46,6 +47,8 @@ settings-show-spaces:             Monter les espaces
 settings-show-end-of-line:        Monter les fins de ligne
 settings-sync-scroll-pos:         Synchroniser le défilement
 settings-format-on-save:          Formater à l'enregistrement
+settings-github-markdown:         GitHub Markdown
+settings-line-endings:            Les Fins de Ligne
 
 settings-spell-check-section:     Correction orthographique
 settings-spell-checking:          Correction orthographique
@@ -60,6 +63,11 @@ settings-open-html-template:      Modèles HTML
 settings-open-dictionary:         Dictionnaire utilisateur
 settings-open-snippets:           Snippets
 settings-open-key-bindings:       Raccourcis clavier
+
+settings-about:                   Sur
+settings-version:				  Version
+settings-web:					  Web
+settings-source:				  Source
 
 === Find Replace Dialog
 
@@ -104,8 +112,14 @@ tooltip-alt-s:                    Alt+S
 tooltip-ctrl-f7:                  Ctrl+F7
 tooltip-ctrl-w:                   Ctrl+W
 
+=== Insert Hyperlink Dialog
+
+insert-hyperlink-title:           Insérer un lien Hypertexte
+insert-hyperlink-optional-title:  titre optiona
+
 === Generic
 
 open:                             Ouvrir
 save:                             Enregistrer
 cancel:                           Annuler
+message-html-clipboard:		        HTML copié dans le presse-papiers

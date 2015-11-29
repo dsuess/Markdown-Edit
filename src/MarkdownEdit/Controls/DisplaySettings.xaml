@@ -6,6 +6,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
              xmlns:local="clr-namespace:MarkdownEdit.Controls"
+             xmlns:models="clr-namespace:MarkdownEdit.Models"
              xmlns:p="clr-namespace:MarkdownEdit.Properties"
              xmlns:i18N="clr-namespace:MarkdownEdit.i18n"
              mc:Ignorable="d"
@@ -28,6 +29,26 @@
            TargetType="Separator">
       <Setter Property="Margin" Value="0 3 0 5" />
     </Style>
+
+    <Style x:Key="LabelStyle"
+           TargetType="TextBlock">
+      <Setter Property="FontSize" Value="16" />
+      <Setter Property="FontWeight" Value="DemiBold" />
+      <Setter Property="Foreground" Value="WhiteSmoke" />
+    </Style>
+    
+    <Style x:Key="AboutLabelStyle"
+           TargetType="TextBlock"
+           BasedOn="{StaticResource LabelStyle}">
+      <Setter Property="Width" Value="75" />
+    </Style>
+
+    <Style x:Key="HyperlinkStyle"
+           TargetType="Hyperlink">
+      <Setter Property="Foreground" Value="WhiteSmoke" />
+      <Setter Property="FontSize" Value="16" />
+      <Setter Property="FontWeight" Value="DemiBold" />
+    </Style>
   </UserControl.Resources>
 
   <ScrollViewer>
@@ -49,6 +70,19 @@
         <controls:ToggleSwitch OffLabel="{i18N:Localize settings-show-end-of-line}" OnLabel="{i18N:Localize settings-show-end-of-line}" IsChecked="{Binding EditorShowEndOfLine}" Style="{StaticResource ToggleSwitchStyle}" />
         <controls:ToggleSwitch OffLabel="{i18N:Localize settings-sync-scroll-pos}" OnLabel="{i18N:Localize settings-sync-scroll-pos}" IsChecked="{Binding SynchronizeScrollPositions}" Style="{StaticResource ToggleSwitchStyle}" />
         <controls:ToggleSwitch OffLabel="{i18N:Localize settings-github-markdown}" OnLabel="{i18N:Localize settings-github-markdown}" IsChecked="{Binding GitHubMarkdown}" Style="{StaticResource ToggleSwitchStyle}" />
+        <Grid HorizontalAlignment="Stretch"
+              Margin="0 5 0 0">
+          <TextBlock Text="{i18N:Localize settings-line-endings}"
+                   Style="{StaticResource AboutLabelStyle}" HorizontalAlignment="Left"
+                   Width="150"/>
+          <ComboBox Width="130"
+                    DisplayMemberPath="Item1"
+                    SelectedValuePath="Item2"
+                    SelectedValue="{Binding LineEnding}"
+                    ItemsSource="{Binding LineEndings}"
+                    HorizontalAlignment="Right">
+          </ComboBox>
+        </Grid>
       </StackPanel>
 
       <TextBlock Style="{StaticResource SectionHeader}" Text="{i18N:Localize settings-spell-check-section}" />
@@ -73,6 +107,46 @@
         <Button Margin="3 2" ToolTip="{i18N:Localize tooltip-f7}" Command="{x:Static local:MainWindow.OpenUserDictionaryCommand}" Content="{i18N:Localize settings-open-dictionary}" />
         <Button Margin="3 2" ToolTip="{i18N:Localize tooltip-f6}" Command="{x:Static local:MainWindow.OpenUserSnippetsCommand}" Content="{i18N:Localize settings-open-snippets}" />
       </UniformGrid>
+
+      <TextBlock Style="{StaticResource SectionHeader}" Text="{i18N:Localize settings-about}" />
+      <Separator Style="{StaticResource SeparatorStyle}" />
+      <StackPanel Margin="30 5">
+        <StackPanel Orientation="Horizontal">
+          <TextBlock Style="{StaticResource AboutLabelStyle}" Text="{i18N:Localize settings-version}" />
+          <TextBlock Style="{StaticResource LabelStyle}" Text="{x:Static models:Utility.Version}" />
+        </StackPanel>
+        <StackPanel Orientation="Horizontal">
+          <TextBlock Style="{StaticResource AboutLabelStyle}" Text="{i18N:Localize settings-web}" />
+          <TextBlock>
+            <Hyperlink NavigateUri="http://markdownedit.com"
+                       Style="{StaticResource HyperlinkStyle}"
+                       RequestNavigate="HyperlinkOnRequestNavigate">
+              http://markdownedit.com
+            </Hyperlink>
+          </TextBlock>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal">
+          <TextBlock Style="{StaticResource AboutLabelStyle}">Twitter</TextBlock>
+          <TextBlock>
+            <Hyperlink NavigateUri="https://twitter.com/mikeward_aa"
+                       Style="{StaticResource HyperlinkStyle}"
+                       RequestNavigate="HyperlinkOnRequestNavigate">
+              mikeward_aa
+            </Hyperlink>
+          </TextBlock>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal">
+          <TextBlock Style="{StaticResource AboutLabelStyle}"  Text="{i18N:Localize settings-source}" />
+          <TextBlock>
+            <Hyperlink NavigateUri="https://github.com/mike-ward/Markdown-Edit"
+                       Style="{StaticResource HyperlinkStyle}"
+                       RequestNavigate="HyperlinkOnRequestNavigate">
+              GitHub
+            </Hyperlink>
+          </TextBlock>
+        </StackPanel>
+      </StackPanel>
+
     </StackPanel>
   </ScrollViewer>
 </UserControl>

@@ -12,6 +12,8 @@ Keyboard Shortcuts
     Ctrl+R         Fichiers récents
     Ctrl+E         Exporter en HTML vers le presse papier
     Ctrl+Shift+E   Exporter en HTML avec le template vers le presse papier
+    Alt+E          Enregistrer sous HTML 
+    F5             Recharger fichier
     Alt+F4         Quitter
 
     Ctrl+W         Activer/désactiver le retour à la ligne automatique
@@ -19,6 +21,7 @@ Keyboard Shortcuts
     F11            Activer/désactiver le mode plein écran
     F12            Basculer entre les modes prévisulation/édition/les deux
     Alt+S          Activer/désactiver l'enregistrement automatique
+    Ctrl+,         Activer/désactiver réglages
 
     Tab            Indenter la ligne courante/sélection de 2 espaces
     Shift+Tab      Désindenter la ligne courante/sélection de 2 espaces
@@ -54,11 +57,12 @@ Keyboard Shortcuts
     Ctrl+B         Mettre en gras le texte sélectionné
     Ctrl+I         Mettre en italique le texte sélectionné
     Ctrl+K         Code (entoure le mot courant ou la sélection par des ``) / insère un ` si pas de sélection
-    Ctrl+L         Convertir le texte sélectionné en liste. Basculer entre non numérotée/numérotée
+    Alt+L          Convertir le texte sélectionné en liste. Basculer entre non numérotée/numérotée
     Ctrl+Q         Convertir le texte sélectionné/la ligne en bloc de citation
     Alt+F          Couper et formater le texte
     Alt+Ctrl+F     Couper et formater le texte et lien de référence
     Alt+Shift+F    Ne pas couper et formater le texte
+    Ctrl+L         Insérer un lien hypertexte
 
     Ctrl+1         Insérer # en début de ligne
     Ctrl+2         Insérer ## en début de ligne
@@ -169,7 +173,7 @@ Les snippets sont constituées d'une seule ligne commençant par:
 
 Exemple
 
-    mde  [Markdown Edit](http://mike-ward.net/markdown)
+    mde  [Markdown Edit](http://markdownedit.com)
 
 Avec cette snippet définie, ouvrez Markdown Edit et saisissez
 
@@ -179,13 +183,15 @@ Où `[TAB]` est la touche tab.
 
 Le texte `mde` est remplacé par
 
-    [Markdown Edit](http://mike-ward.net/markdown)
+    [Markdown Edit](http://markdownedit.com)
 
 ### Paramètres de substitution des snippets
 
+-   $CLIPBOARD$ - est remplacé par le contenu du presse (texte seulement)
+
 -   $END$ - Place le curseur après insertion. Par exemple
 
-    mde [Markdown $END$ Edit](http://mike-ward.net/markdown)
+    mde [Markdown $END$ Edit](http://markdownedit.com)
 
     place le curseur entre *Markdown* et *Edit*
 
@@ -287,20 +293,15 @@ Etc.
 Limitations
 -----------
 
--   Seulement CommonMark est supporté
 -   Interface mono document
--   <s>La colorisation syntaxique ne fonctionne pas avec les constructions sur
-    plusieurs lignes. Elle utilise des expressions régulières qui ne sont pas
-    compatibles avec les constructions sous jacentes de Markdown. J'espère qu'un
-    solide parser CommonMark (like PEG) apparaîtra.</s>
 -   Je l'ai écris ;)
 
 A propos
 --------
 
-Version 1.10.0  
-Home Page: <http://mike-ward.net/markdownedit>  
-Twitter: `@mikeward_aa` Source: <https://github.com/mike-ward/Markdown-Edit>
+Home Page: <http://markdownedit.com>  
+Twitter: `@mikeward_aa`  
+Source: <https://github.com/mike-ward/Markdown-Edit>
 
 Markdown Edit License
 ---------------------

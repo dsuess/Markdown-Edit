@@ -3,19 +3,22 @@ using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.IO;
 using System.Media;
+using System.Net.Http;
 using System.Reflection;
-using System.Runtime.CompilerServices;
-using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
-using MarkdownEdit.MarkdownConverters;
+using MarkdownEdit.Controls;
+using MarkdownEdit.i18n;
+using Microsoft.Win32;
 
 namespace MarkdownEdit.Models
 {
     public static class Utility
     {
+        public const string Version = "1.16.2";
+
         public static Func<TKey, TResult> Memoize<TKey, TResult>(this Func<TKey, TResult> func)
         {
             var cache = new ConcurrentDictionary<TKey, TResult>();
@@ -52,64 +55,41 @@ namespace MarkdownEdit.Models
 
         public static void Beep() => SystemSounds.Beep.Play();
 
-        public static void EditFile(string file) => Process.Start("Notepad.exe", file);
+        public static Process EditFile(string file) => App.UserSettings.UseDefaultEditor
+            ? Process.Start(file)
+            : Process.Start("Notepad.exe", file);
 
         public static string AssemblyFolder() => Path.GetDirectoryName(ExecutingAssembly());
 
         public static string ExecutingAssembly() => Assembly.GetExecutingAssembly().GetName().CodeBase.Substring(8).Replace('/', '\\');
 
-        public static void ExportHtmlToClipboard(string markdown, IMarkdownConverter converter)
+        public static void ExportHtmlToClipboard(string markdown, bool includeTemplate = false)
         {
             var text = RemoveYamlFrontMatter(markdown);
-            var html = converter.ConvertToHtml(text, false);
-            Clipboard.SetText(html);
+            var html = Markdown.ToHtml(text);
+            if (includeTemplate) html = UserTemplate.InsertContent(html);
+            CopyHtmlToClipboard(html);
         }
 
-        public static void ExportHtmlTemplateToClipboard(string markdown, IMarkdownConverter converter)
+        private static void CopyHtmlToClipboard(string html)
         {
-            var text = RemoveYamlFrontMatter(markdown);
-            var html = converter.ConvertToHtml(text, false);
-            html = UserTemplate.InsertContent(html);
             Clipboard.SetText(html);
+            var popup = new FadingPopupControl();
+            var message = TranslationProvider.Translate("message-html-clipboard") as string;
+            popup.ShowDialogBox(Application.Current.MainWindow, message);
         }
 
         public static string RemoveYamlFrontMatter(string markdown)
         {
             if (App.UserSettings.IgnoreYaml == false) return markdown;
-            var tuple = SeperateFrontMatter(markdown);
+            var tuple = Markdown.SeperateFrontMatter(markdown);
             return tuple.Item2;
-        }
-
-        public static Tuple<string, string> SeperateFrontMatter(string text)
-        {
-            if (Regex.IsMatch(text, @"^---\s*$", RegexOptions.Multiline))
-            {
-                var matches = Regex.Matches(text, @"^(?:---)|(?:\.\.\.)\s*$", RegexOptions.Multiline);
-                if (matches.Count < 2) return Tuple.Create(string.Empty, text);
-                var match = matches[1];
-                var index = match.Index + match.Groups[0].Value.Length + 1;
-                while (index < text.Length && char.IsWhiteSpace(text[index])) index += 1;
-                return Tuple.Create(text.Substring(0, index), text.Substring(index));
-            }
-            return Tuple.Create(string.Empty, text);
-        }
-
-        public static string SuggestFilenameFromTitle(string text)
-        {
-            var result = SeperateFrontMatter(text);
-            if (string.IsNullOrEmpty(result.Item1)) return string.Empty;
-            var pattern = new Regex(@"title:\s*(.+)", RegexOptions.Multiline);
-            var match = pattern.Match(text);
-            var title = match.Success ? match.Groups[1].Value : string.Empty;
-            if (string.IsNullOrEmpty(title)) return string.Empty;
-            var filename = DateTime.Now.ToString("yyyy-MM-dd-") + title.ToSlug(true);
-            return filename;
         }
 
         public static T GetDescendantByType<T>(this Visual element) where T : class
         {
             if (element == null) return default(T);
-            if (element.GetType() == typeof(T)) return element as T;
+            if (element.GetType() == typeof (T)) return element as T;
             T foundElement = null;
             (element as FrameworkElement)?.ApplyTemplate();
             for (var i = 0; i < VisualTreeHelper.GetChildrenCount(element); i++)
@@ -126,17 +106,36 @@ namespace MarkdownEdit.Models
 
         public static void ShowParseError(Exception ex, string file)
         {
-            MessageBox.Show(
-                Application.Current.MainWindow,
-                $"{ex.Message} in {file}",
-                App.Title,
-                MessageBoxButton.OK,
-                MessageBoxImage.Error);
+            Application.Current.Dispatcher.Invoke(() =>
+                Application.Current.MainWindow != null
+                    ? MessageBox.Show(
+                        Application.Current.MainWindow,
+                        $"{ex.Message} in {file}",
+                        App.Title,
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Error)
+                    : MessageBox.Show(
+                        $"{ex.Message} in {file}",
+                        App.Title,
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Error)
+                );
         }
 
-        public static void RequireNotNull<T>(this T arg, [CallerMemberName] string name = null)
+        public static async Task<bool> IsCurrentVersion()
         {
-            if (arg == null) throw new ArgumentNullException(name);
+            try
+            {
+                using (var http = new HttpClient())
+                {
+                    var version = await http.GetStringAsync("http://markdownedit.com/version.txt");
+                    return string.IsNullOrWhiteSpace(version) || version == Version;
+                }
+            }
+            catch (Exception)
+            {
+                return true;
+            }
         }
     }
 }

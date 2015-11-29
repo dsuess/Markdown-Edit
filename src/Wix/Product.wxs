@@ -4,7 +4,7 @@
   <Product Id="*"
            Name="Markdown Edit"
            Language="1033"
-           Version="1.10.0.0"
+           Version="1.16.2.0"
            Manufacturer="Mike Ward"
            UpgradeCode="77d4d41b-4443-42c6-87dd-20771c9bb031">
 
@@ -31,13 +31,12 @@
       </Directory>
 
       <Directory Id="DesktopFolder" Name="Desktop">
-        <Component Id="ApplicationShortcutDesktop" Guid="{12B3435A-6F17-4484-8F9C-A0D93FF32A6A}">
+        <Component Id="ApplicationShortcutDesktop" Guid="*">
           <Shortcut Id="ApplicationDesktopShortcut"
               Name="Markdown Edit"
               Description="Desktop Markdown Editor"
               Target="[INSTALLFOLDER]mde.exe"
               WorkingDirectory="INSTALLFOLDER" />
-          <RemoveFolder Id="DesktopFolder" On="uninstall" />
           <RegistryValue Root="HKCU" Key="Software\Microsoft\Markdown Edit" Name="installed" Type="integer" Value="1" KeyPath="yes" />
         </Component>
       </Directory>
@@ -48,8 +47,14 @@
             <Component Id="CommonMark.dll" Guid="{785B177B-0D55-47EB-959D-270F0548A263}">
               <File Id="CommonMark.dll" KeyPath="yes" Source="$(var.SourceFiles)\CommonMark.dll" />
             </Component>
+            <Component Id="CommonMark.pdb" Guid="{210212CB-4522-4140-AC4E-A219EB4596DC}">
+              <File Id="CommonMark.pdb" KeyPath="yes" Source="$(var.SourceFiles)\CommonMark.pdb" />
+            </Component>
             <Component Id="HtmlAgilityPack.dll" Guid="{697D078D-0C77-49F5-92BD-0683C9C55A94}">
               <File Id="HtmlAgilityPack.dll" KeyPath="yes" Source="$(var.SourceFiles)\HtmlAgilityPack.dll" />
+            </Component>
+            <Component Id="HtmlAgilityPack.pdb" Guid="{088804C6-83D8-461B-9310-C9A64839ED3B}">
+              <File Id="HtmlAgilityPack.pdb" KeyPath="yes" Source="$(var.SourceFiles)\HtmlAgilityPack.pdb" />
             </Component>
             <Component Id="Hunspellx64.dll" Guid="{CF56E78F-5FE3-4CF6-983D-251A8FC4ECE5}">
               <File Id="Hunspellx64.dll" KeyPath="yes" Source="$(var.SourceFiles)\Hunspellx64.dll" />
@@ -72,6 +77,9 @@
             <Component Id="mde.exe" Guid="{D8745F9D-E4D6-4682-AF42-46F38A38B27B}">
               <File Id="mde.exe" KeyPath="yes" Source="$(var.SourceFiles)\mde.exe" />
             </Component>
+            <Component Id="mde.pdb" Guid="{933D7D17-7B06-4D36-ACAA-D4308889C845}">
+              <File Id="mde.pdb" KeyPath="yes" Source="$(var.SourceFiles)\mde.pdb" />
+            </Component>
             <Component Id="mde.exe.config" Guid="{BF5FEE33-CC59-4B7B-82A5-3B3DF599919E}">
               <File Id="mde.exe.config" KeyPath="yes" Source="$(var.SourceFiles)\mde.exe.config" />
             </Component>
@@ -81,11 +89,17 @@
             <Component Id="NHunspell.dll" Guid="{9F5FF222-8FC3-43A5-982D-74C3B961C611}">
               <File Id="NHunspell.dll" KeyPath="yes" Source="$(var.SourceFiles)\NHunspell.dll" />
             </Component>
+            <Component Id="NHunspell.pdb" Guid="{A6E4D773-F5C4-427B-AC7A-6D5A62730FE1}">
+              <File Id="NHunspell.pdb" KeyPath="yes" Source="$(var.SourceFiles)\NHunspell.pdb" />
+            </Component>
             <Component Id="System.Windows.Interactivity.dll" Guid="{D04B4B99-BBBA-4FC1-90F3-2797379617E4}">
               <File Id="System.Windows.Interactivity.dll" KeyPath="yes" Source="$(var.SourceFiles)\System.Windows.Interactivity.dll" />
             </Component>
             <Component Id="Pandoc.exe" Guid="{53A4F2D1-A7CC-47F2-BAC0-B41132B49ACA}">
               <File Id="Pandoc.exe" KeyPath="yes" Source="$(var.SourceFiles)\pandoc.exe" />
+            </Component>
+            <Component Id="NReco.PdfGenerator.dll" Guid="{8DB6A567-ED09-430A-B9ED-C02DD8CE72B6}">
+              <File Id="NReco.PdfGenerator.dll" KeyPath="yes" Source="$(var.SourceFiles)\NReco.PdfGenerator.dll" />
             </Component>
             <Directory Id="SpellCheck" Name="SpellCheck">
               <Directory Id="Dictionaries" Name="Dictionaries">
@@ -94,6 +108,12 @@
                 </Component>
                 <Component Id="en_US.dic" Guid="{5E0746AB-84B4-49A5-B484-A102E434809B}">
                   <File Id="en_US.dic" KeyPath="yes" Source="$(var.SourceFiles)\SpellCheck\Dictionaries\en_US.dic" />
+                </Component>
+                <Component Id="Danish.aff" Guid="{7C13865A-F6FA-43C5-B5F4-FA1E93B0DCCE}">
+                  <File Id="Danish.aff" KeyPath="yes" Source="$(var.SourceFiles)\SpellCheck\Dictionaries\Danish.aff" />
+                </Component>
+                <Component Id="Danish.dic" Guid="{029EA5B5-BD37-4534-8EFF-2C5D144C0A41}">
+                  <File Id="Danish.dic" KeyPath="yes" Source="$(var.SourceFiles)\SpellCheck\Dictionaries\Danish.dic" />
                 </Component>
                 <Component Id="French.aff" Guid="{B945C72B-D01C-4974-8405-D80E90FD38ED}">
                   <File Id="French.aff" KeyPath="yes" Source="$(var.SourceFiles)\SpellCheck\Dictionaries\French.aff" />
@@ -118,6 +138,12 @@
                 </Component>
                 <Component Id="Spanish.dic" Guid="{5F05F937-13E6-491A-83A1-BBF413A59B0F}">
                   <File Id="Spanish.dic" KeyPath="yes" Source="$(var.SourceFiles)\SpellCheck\Dictionaries\Spanish.dic" />
+                </Component>
+                <Component Id="Russian.aff" Guid="{9563DB6D-4470-4609-8EBF-014D82641053}">
+                  <File Id="Russian.aff" KeyPath="yes" Source="$(var.SourceFiles)\SpellCheck\Dictionaries\Russian.aff" />
+                </Component>
+                <Component Id="Russian.dic" Guid="{AF4346BC-7836-48ED-ACDF-9D7750E40AC5}">
+                  <File Id="Russian.dic" KeyPath="yes" Source="$(var.SourceFiles)\SpellCheck\Dictionaries\Russian.dic" />
                 </Component>
               </Directory>
             </Directory>
@@ -159,6 +185,14 @@
                   <File Id="lang_en_help_md" KeyPath="yes" Source="$(var.SourceFiles)\Languages\en\help.md" />
                 </Component>
               </Directory>
+              <Directory Id="es" Name="es">
+                <Component Id="lang_es_local.txt" Guid="{D22D082E-0408-4546-9B71-C6D95259E357}">
+                  <File Id="lang_es_local.txt" KeyPath="yes" Source="$(var.SourceFiles)\Languages\es\local.txt" />
+                </Component>
+                <Component Id="lang_es_help.md" Guid="{EC4DE07A-B8A2-44E0-BCC2-8CA437D0FF17}">
+                  <File Id="lang_es_help_md" KeyPath="yes" Source="$(var.SourceFiles)\Languages\es\help.md" />
+                </Component>
+              </Directory>
               <Directory Id="fr" Name="fr">
                 <Component Id="lang_fr_local.txt" Guid="{B42B6BE1-95E7-45E2-ADF9-C60BD42E22AC}">
                   <File Id="lang_fr_local.txt" KeyPath="yes" Source="$(var.SourceFiles)\Languages\fr\local.txt" />
@@ -175,13 +209,18 @@
 
     <Property Id="WIXUI_INSTALLDIR" Value="INSTALLFOLDER" />
     <UIRef Id="WixUI_Minimal" />
-
+    <WixVariable Id="WixUILicenseRtf" Value="eula.rtf" />
+    
     <Property Id="SKIPFRAMEWORKCHECK" Value="0" />
     <PropertyRef Id="WIX_IS_NETFRAMEWORK_46_OR_LATER_INSTALLED" />
     <Condition Message="Markdown Edit requires .NET Framework 4.6. Visit http://smallestdotnet.com">
       <![CDATA[Installed OR (SKIPFRAMEWORKCHECK <> 0) OR (WIX_IS_NETFRAMEWORK_46_OR_LATER_INSTALLED <> 0)]]>
     </Condition>
 
+    <InstallExecuteSequence>
+      <RemoveShortcuts>Installed AND NOT UPGRADINGPRODUCTCODE</RemoveShortcuts>
+    </InstallExecuteSequence>
+ 
     <Feature Id="ProductFeature" Title="Markdown Edit" Level="1">
       <ComponentGroupRef Id="ProductComponents" />
     </Feature>
@@ -190,7 +229,9 @@
       <ComponentRef Id="ApplicationShortcut" />
       <ComponentRef Id="ApplicationShortcutDesktop" />
       <ComponentRef Id="CommonMark.dll" />
+      <ComponentRef Id="CommonMark.pdb" />
       <ComponentRef Id="HtmlAgilityPack.dll" />
+      <ComponentRef Id="HtmlAgilityPack.pdb" />
       <ComponentRef Id="Hunspellx64.dll" />
       <ComponentRef Id="Hunspellx86.dll" />
       <ComponentRef Id="ICSharpCode.AvalonEdit.dll" />
@@ -198,13 +239,18 @@
       <ComponentRef Id="Microsoft.DwayneNeed.dll" />
       <ComponentRef Id="Microsoft.DwayneNeed.Win32.dll" />
       <ComponentRef Id="mde.exe" />
+      <ComponentRef Id="mde.pdb" />
       <ComponentRef Id="mde.exe.config" />
       <ComponentRef Id="Newtonsoft.Json.dll" />
       <ComponentRef Id="NHunspell.dll" />
+      <ComponentRef Id="NHunspell.pdb" />
       <ComponentRef Id="System.Windows.Interactivity.dll" />
       <ComponentRef Id="Pandoc.exe" />
+      <ComponentRef Id="NReco.PdfGenerator.dll" />
       <ComponentRef Id="en_US.aff" />
       <ComponentRef Id="en_US.dic" />
+      <ComponentRef Id="Danish.aff" />
+      <ComponentRef Id="Danish.dic" />
       <ComponentRef Id="French.aff" />
       <ComponentRef Id="French.dic" />
       <ComponentRef Id="German.aff" />
@@ -213,6 +259,8 @@
       <ComponentRef Id="Italian.dic" />
       <ComponentRef Id="Spanish.aff" />
       <ComponentRef Id="Spanish.dic" />
+      <ComponentRef Id="Russian.aff" />
+      <ComponentRef Id="Russian.dic" />
       <ComponentRef Id="brain_salad_surgery.json" />
       <ComponentRef Id="inflamed_wound.json" />
       <ComponentRef Id="milk_toast.json" />
@@ -224,6 +272,8 @@
       <ComponentRef Id="zenburn.json" />
       <ComponentRef Id="lang_en_local.txt" />
       <ComponentRef Id="lang_en_help.md" />
+      <ComponentRef Id="lang_es_local.txt" />
+      <ComponentRef Id="lang_es_help.md" />
       <ComponentRef Id="lang_fr_local.txt" />
       <ComponentRef Id="lang_fr_help.md" />
     </ComponentGroup>

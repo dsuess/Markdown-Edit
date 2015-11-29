@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -12,9 +13,9 @@ using System.Windows.Input;
 using System.Windows.Navigation;
 using CommonMark;
 using HtmlAgilityPack;
-using MarkdownEdit.MarkdownConverters;
-using MarkdownEdit.Models;
 using mshtml;
+using MarkdownEdit.Models;
+using MarkdownEdit.Properties;
 
 namespace MarkdownEdit.Controls
 {
@@ -27,7 +28,7 @@ namespace MarkdownEdit.Controls
         public Preview()
         {
             InitializeComponent();
-            Browser.Navigate(UserTemplate.Load());
+            Browser.Navigate(new Uri(UserTemplate.Load()));
             Loaded += OnLoaded;
             Unloaded += (sender, args) => _templateWatcher?.Dispose();
             Browser.Navigating += BrowserOnNavigating;
@@ -44,7 +45,7 @@ namespace MarkdownEdit.Controls
                 // kill popups
                 dynamic activeX = Browser.GetType().InvokeMember("ActiveXInstance",
                     BindingFlags.GetProperty | BindingFlags.Instance | BindingFlags.NonPublic,
-                    null, Browser, new object[] { });
+                    null, Browser, new object[] {});
 
                 activeX.Silent = true;
             });
@@ -56,15 +57,59 @@ namespace MarkdownEdit.Controls
             try
             {
                 markdown = Utility.RemoveYamlFrontMatter(markdown);
-                var html = MarkdownConverter.ConvertToHtml(markdown);
+                var html = Markdown.ToHtml(markdown);
+                UpdateBaseTag();
                 var div = GetContentsDiv();
                 div.innerHTML = ScrubHtml(html);
                 WordCount = div.innerText.WordCount();
+                EmitFirePreviewUpdatedEvent();
             }
             catch (CommonMarkException e)
             {
                 MessageBox.Show(e.ToString(), App.Title);
             }
+        }
+
+        private void EmitFirePreviewUpdatedEvent()
+        {
+            try
+            {
+                dynamic doc = Browser.Document;
+                if (doc == null) return;
+                var ev = doc.createEvent("event");
+                if (ev == null) return;
+                ev.initEvent("previewUpdated", true, true);
+                doc.dispatchEvent(ev);
+            }
+            catch (COMException)
+            {
+            }
+        }
+
+        private void UpdateBaseTag()
+        {
+            const string basetTagId = "base-tag-id";
+            var lastOpen = Settings.Default.LastOpenFile.StripOffsetFromFileName();
+            if (string.IsNullOrWhiteSpace(lastOpen)) return;
+            var folder = Path.GetDirectoryName(lastOpen);
+            if (string.IsNullOrWhiteSpace(folder)) return;
+            var document = (IHTMLDocument3) Browser.Document;
+            var baseElement = document?.getElementById(basetTagId);
+            if (baseElement == null)
+            {
+                var doc2 = (IHTMLDocument2) Browser.Document;
+                baseElement = doc2.createElement("base");
+                baseElement.id = basetTagId;
+                var head = document?.getElementsByTagName("head").item(0);
+                head?.appendChild(baseElement);
+            }
+            baseElement.setAttribute("href", "file:///" + folder.Replace('\\', '/') + "/");
+        }
+
+        public void Print()
+        {
+            var document = (IHTMLDocument2) Browser.Document;
+            document.execCommand("Print", true, null);
         }
 
         private static string ScrubHtml(string html)
@@ -113,7 +158,7 @@ namespace MarkdownEdit.Controls
 
         private IHTMLElement GetContentsDiv()
         {
-            var document = (IHTMLDocument3)Browser.Document;
+            var document = (IHTMLDocument3) Browser.Document;
             var element = document?.getElementById("content");
             return element;
         }
@@ -134,22 +179,23 @@ namespace MarkdownEdit.Controls
         public void SetScrollOffset(ScrollChangedEventArgs ea)
         {
             if (App.UserSettings.SynchronizeScrollPositions == false) return;
-            var document2 = (IHTMLDocument2)Browser.Document;
-            var document3 = (IHTMLDocument3)Browser.Document;
+            var document2 = (IHTMLDocument2) Browser.Document;
+            var document3 = (IHTMLDocument3) Browser.Document;
             if (document3?.documentElement != null)
             {
                 var percentToScroll = PercentScroll(ea);
                 if (percentToScroll > 0.99) percentToScroll = 1.1; // deal with round off at end of scroll
                 var body = document2.body;
-                var scrollHeight = ((IHTMLElement2)body).scrollHeight - document3.documentElement.offsetHeight;
-                document2.parentWindow.scroll(0, (int)Math.Ceiling(percentToScroll * scrollHeight));
+                if (body == null) return;
+                var scrollHeight = ((IHTMLElement2) body).scrollHeight - document3.documentElement.offsetHeight;
+                document2.parentWindow.scroll(0, (int) Math.Ceiling(percentToScroll*scrollHeight));
             }
         }
 
         private static double PercentScroll(ScrollChangedEventArgs e)
         {
             var y = e.ExtentHeight - e.ViewportHeight;
-            return e.VerticalOffset / ((Math.Abs(y) < .000001) ? 1 : y);
+            return e.VerticalOffset/((Math.Abs(y) < .000001) ? 1 : y);
         }
 
         private void BrowserPreviewKeyDown(object sender, KeyEventArgs e)
@@ -189,15 +235,6 @@ namespace MarkdownEdit.Controls
         {
             get { return _wordCount; }
             set { Set(ref _wordCount, value); }
-        }
-
-        public static readonly DependencyProperty MarkdownConverterProperty = DependencyProperty.Register(
-            "MarkdownConverter", typeof(IMarkdownConverter), typeof(Preview), new PropertyMetadata(default(IMarkdownConverter)));
-
-        public IMarkdownConverter MarkdownConverter
-        {
-            get { return (IMarkdownConverter)GetValue(MarkdownConverterProperty); }
-            set { SetValue(MarkdownConverterProperty, value); }
         }
 
         // INotifyPropertyChanged
